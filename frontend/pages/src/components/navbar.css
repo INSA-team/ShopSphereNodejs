@@ -1,0 +1,17 @@
+nav{
+  background-color: #ffffff;
+  padding: 10px 38px;
+  padding-bottom: 7px;
+}
+nav a{
+  margin-left: 3px;
+  margin-right: 20px;
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 5px;
+}
+nav a.active{
+  border-bottom: 2px solid #309D9A;
+}

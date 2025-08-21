@@ -1,0 +1,16 @@
+.seller{
+  background-color: white;
+  width: 200px;
+  height: 300px;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.seller img{
+  width: 100%;
+}
+
+.seller i.obtained{
+  color: gold;
+}

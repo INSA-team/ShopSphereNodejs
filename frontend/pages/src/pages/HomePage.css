@@ -1,0 +1,54 @@
+.heroSection{
+  background-color: #309D9A;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.heroSection p{
+  margin: 20px 0;
+}
+
+.btn{
+  padding: 10px 20px;
+  background-color: white;
+  color: #309D9A;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.btn i{
+  margin-right: 15px;
+}
+
+.features ul{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  column-gap: 20px;
+  row-gap: 20px;
+  padding: 20px;
+}
+
+.features ul li{
+  list-style: inherit;
+  padding: 60px 40px;
+  background-color: white;
+  border-radius: 10px;
+  transition: .3s ease;
+  font-size: 16px;
+  text-align: center;
+}
+
+.features ul li:hover{
+  transform: scale(0.9) translateY(-10px);
+}
+
+.features ul li i{
+  color: #309D9A;
+  margin-bottom: 20px;
+  font-size: 20px;
+  text-align: center;
+  width: 100%;
+}
