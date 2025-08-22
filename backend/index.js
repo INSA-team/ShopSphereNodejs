@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const transformedData = [
   {
@@ -304,6 +304,24 @@ const transformedData = [
   },
 ];
 
+// --- Mock Cart Data ---
+// This is a hardcoded array of product objects that simulates a shopping cart.
+// It is separate from the main product data.
+const mockCartItems = [
+  {
+      "id": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
+      "name": "Intermediate Size Basketball",
+      "price": 24.50,
+      "quantity": 1
+  },
+  {
+      "id": "dd82ca78-a18b-4e2a-9250-31e67412f98d",
+      "name": "Cotton Oversized Sweater - Gray",
+      "price": 32.99,
+      "quantity": 2
+  }
+];
+
 app.use(cors());
 app.use(express.json());
 
@@ -347,6 +365,12 @@ app.get('/api/products-by-category', (req, res) => {
     return res.status(404).json({ error: 'No products found for this category.' });
   }
   res.json({ values: filteredProducts });
+});
+
+// --- NEW ENDPOINT: Get Shopping Cart Items ---
+// This endpoint returns a list of products in the cart.
+app.get('/api/cart', (req, res) => {
+  res.json({ values: mockCartItems });
 });
 
 app.listen(port, () => {
