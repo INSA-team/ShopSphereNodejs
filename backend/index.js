@@ -312,13 +312,19 @@ const mockCartItems = [
       "id": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
       "name": "Intermediate Size Basketball",
       "price": 24.50,
-      "quantity": 1
+      "quantity": 1,
+      "imageUrl": "products/intermediate-composite-basketball.jpg",
+      "rating": 3,
+      "description": "An intermediate-sized basketball with a high-quality composite cover for both indoor and outdoor play. Provides excellent grip and durability."
   },
   {
       "id": "dd82ca78-a18b-4e2a-9250-31e67412f98d",
       "name": "Cotton Oversized Sweater - Gray",
       "price": 32.99,
-      "quantity": 2
+      "quantity": 2,
+      "imageUrl": "products/women-plain-cotton-oversized-sweater-gray.jpg",
+      "rating": 4,
+      "description": "An ultra-soft oversized sweater made from a premium cotton blend. Its relaxed fit makes it a cozy choice for any season."
   }
 ];
 
