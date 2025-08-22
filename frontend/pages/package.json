@@ -10,7 +10,7 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start:dev": "concurrently \"npm run dev\" \"cd ../backend && python manage.py runserver\"",
-    "predeploy": "cd ./frontend/pages && npm run build",
+    "predeploy": " npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
