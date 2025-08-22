@@ -1,13 +1,11 @@
-.topSellers{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 20px;
+h2{
+  margin: 0 14px;
 }
 
 .seller{
   background-color: white;
   width: 200px;
+  height: 330px;
   padding: 20px;
   border-radius: 10px;
   position: relative;
@@ -20,6 +18,7 @@
 }
 
 .seller h2{
+  margin: 0;
   margin-bottom: 35px;
 }
 
@@ -53,4 +52,11 @@
 
 .seller button:hover{
   background-color: #267a7a;
+}
+
+.products{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  padding: 20px;
 }

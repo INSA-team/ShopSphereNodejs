@@ -3,8 +3,9 @@ import Navbar from "../components/Navbar";
 import React from "react";
 import axios from "axios";
 import './ShopPage.css'; // Assuming you have a CSS file for styling
+import { Link } from "react-router";
 
-function ShopPage(){
+function ShopPage({ setProuductIndex }) {
   const [topSellers, setTopSellers] = React.useState([]);
 
   React.useEffect(() => {
@@ -27,7 +28,7 @@ function ShopPage(){
       </div>
       <section className="topSellers">
         {/* Use conditional rendering to check if topSellers is a valid array */}
-        {topSellers && topSellers.length > 0 && topSellers.map((seller) => (
+        {topSellers && topSellers.length > 0 && topSellers.map((seller,index) => (
           <div key={seller.id} className="seller">
             <img src={seller.imageUrl} alt={seller.name} />
             <h2>{seller.name}</h2>
@@ -39,6 +40,7 @@ function ShopPage(){
                 <i key={i} className="fas fa-star"></i>
               ))}
             </span>
+            <button onClick={() => setProuductIndex(index)}><Link to='/details'><i className="fas fa-arrow-right"></i></Link></button>
           </div>
         ))}
       </section>
