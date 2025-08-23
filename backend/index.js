@@ -305,9 +305,7 @@ const transformedData = [
 ];
 
 // --- Mock Cart Data ---
-// This is a hardcoded array of product objects that simulates a shopping cart.
-// It is separate from the main product data.
-const mockCartItems = [
+let mockCartItems = [
   {
       "id": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
       "name": "Intermediate Size Basketball",
@@ -333,16 +331,13 @@ app.use(express.json());
 
 // Main endpoint to get data. Handles a new "expand=categories" query.
 app.get('/api/top-sellers', (req, res) => {
-  // Check if the 'expand' query parameter is set to 'categories'.
   if (req.query.expand === 'categories') {
-    // If so, get a unique list of all categories from the data.
     const categories = [...new Set(transformedData.map(product => product.category))];
     res.json({
       message: 'Categories successfully retrieved',
       values: categories
     });
   } else {
-    // Otherwise, return all product data as before.
     res.json({
       message: 'Data successfully retrieved',
       values: transformedData
@@ -373,10 +368,26 @@ app.get('/api/products-by-category', (req, res) => {
   res.json({ values: filteredProducts });
 });
 
-// --- NEW ENDPOINT: Get Shopping Cart Items ---
-// This endpoint returns a list of products in the cart.
+// --- Get Shopping Cart Items ---
 app.get('/api/cart', (req, res) => {
   res.json({ values: mockCartItems });
+});
+
+// --- NEW ENDPOINT: Remove an item from the cart ---
+app.delete('/api/cart/:id', (req, res) => {
+  const { id } = req.params;
+
+  // Find the index of the item to remove
+  const itemIndex = mockCartItems.findIndex(item => item.id === id);
+
+  if (itemIndex > -1) {
+    // Remove the item from the array
+    mockCartItems.splice(itemIndex, 1);
+    res.json({ message: 'Item removed successfully.' });
+  } else {
+    // If the item is not found, send a 404 response
+    res.status(404).json({ error: 'Item not found in cart.' });
+  }
 });
 
 app.listen(port, () => {
