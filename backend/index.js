@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -304,28 +305,9 @@ const transformedData = [
   },
 ];
 
-// --- Mock Cart Data ---
-// This array now uses 'let' so items can be added and removed.
-let mockCartItems = [
-  {
-      "id": "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-      "name": "Intermediate Size Basketball",
-      "price": 24.50,
-      "quantity": 1,
-      "imageUrl": "products/intermediate-composite-basketball.jpg",
-      "rating": 3,
-      "description": "An intermediate-sized basketball with a high-quality composite cover for both indoor and outdoor play. Provides excellent grip and durability."
-  },
-  {
-      "id": "dd82ca78-a18b-4e2a-9250-31e67412f98d",
-      "name": "Cotton Oversized Sweater - Gray",
-      "price": 32.99,
-      "quantity": 2,
-      "imageUrl": "products/women-plain-cotton-oversized-sweater-gray.jpg",
-      "rating": 4,
-      "description": "An ultra-soft oversized sweater made from a premium cotton blend. Its relaxed fit makes it a cozy choice for any season."
-  }
-];
+// In-memory "database" for user accounts and their carts.
+// Each key is a unique userId.
+let users = {};
 
 app.use(cors());
 app.use(express.json());
@@ -369,39 +351,65 @@ app.get('/api/products-by-category', (req, res) => {
   res.json({ values: filteredProducts });
 });
 
-// --- GET Shopping Cart Items ---
-// This endpoint returns a list of products in the cart.
-app.get('/api/cart', (req, res) => {
-  res.json({ values: mockCartItems });
+// --- NEW ENDPOINT: Create a new user account ---
+// This endpoint generates a unique userId and creates a new entry for the user.
+app.post('/api/account', (req, res) => {
+  const userId = uuidv4();
+  users[userId] = {
+    cart: []
+  };
+  res.status(201).json({ message: 'Account created successfully.', userId });
 });
 
-// --- POST endpoint to add an item to the cart ---
-app.post('/api/cart', (req, res) => {
-  const newItem = req.body;
+// --- GET Shopping Cart Items for a specific user ---
+// The userId is now a required query parameter.
+app.get('/api/cart', (req, res) => {
+  const { userId } = req.query;
+  if (!userId || !users[userId]) {
+    return res.status(404).json({ error: 'User not found or userId is missing.' });
+  }
+  res.json({ values: users[userId].cart });
+});
 
-  if (!newItem || !newItem.id || !newItem.quantity) {
+// --- POST endpoint to add an item to a specific user's cart ---
+app.post('/api/cart', (req, res) => {
+  const { userId, item } = req.body;
+
+  if (!userId || !users[userId]) {
+    return res.status(404).json({ error: 'User not found or userId is missing.' });
+  }
+
+  if (!item || !item.id || !item.quantity) {
     return res.status(400).json({ error: 'Invalid cart item data.' });
   }
 
-  const existingItem = mockCartItems.find(item => item.id === newItem.id);
+  const userCart = users[userId].cart;
+  const existingItem = userCart.find(cartItem => cartItem.id === item.id);
 
   if (existingItem) {
-    existingItem.quantity += newItem.quantity;
+    existingItem.quantity += item.quantity;
     res.json({ message: 'Item quantity updated successfully.', values: existingItem });
   } else {
-    mockCartItems.push(newItem);
-    res.status(201).json({ message: 'Item added to cart successfully.', values: newItem });
+    userCart.push(item);
+    res.status(201).json({ message: 'Item added to cart successfully.', values: item });
   }
 });
 
-// --- DELETE endpoint to remove an item from the cart ---
+// --- DELETE endpoint to remove an item from a specific user's cart ---
 app.delete('/api/cart/:id', (req, res) => {
   const { id } = req.params;
+  const { userId } = req.query;
 
-  const initialLength = mockCartItems.length;
-  mockCartItems = mockCartItems.filter(item => item.id !== id);
-  
-  if (mockCartItems.length < initialLength) {
+  if (!userId || !users[userId]) {
+    return res.status(404).json({ error: 'User not found or userId is missing.' });
+  }
+
+  const userCart = users[userId].cart;
+  const initialLength = userCart.length;
+
+  users[userId].cart = userCart.filter(item => item.id !== id);
+
+  if (users[userId].cart.length < initialLength) {
     res.json({ message: 'Item removed successfully.' });
   } else {
     res.status(404).json({ error: 'Item not found in cart.' });
